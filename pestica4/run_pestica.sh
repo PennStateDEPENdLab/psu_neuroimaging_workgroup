@@ -202,8 +202,8 @@ fi
 
 # write command line and PESTICA_DIR to history file
 echo "`date`" >> $epi_pestica/pestica_history.txt
-echo "`svn info $PESTICA_DIR/run_pestica.sh |grep URL`" >> $epi_pestica/pestica_history.txt
-echo "`svn info $PESTICA_DIR/run_pestica.sh |grep Rev`" >> $epi_pestica/pestica_history.txt
+#echo "`svn info $PESTICA_DIR/run_pestica.sh |grep URL`" >> $epi_pestica/pestica_history.txt
+#echo "`svn info $PESTICA_DIR/run_pestica.sh |grep Rev`" >> $epi_pestica/pestica_history.txt
 echo "PESTICA_v4.0 command line: `basename $fullcommand` $*" >> $epi_pestica/pestica_history.txt
 echo "PESTICA env:
 `env | grep PESTICA`" >> $epi_pestica/pestica_history.txt
