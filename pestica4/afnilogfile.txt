@@ -1,0 +1,12 @@
+
+Thanks go to MM Klosek for you-know-what
+
+Initializing: X11[The X.Org Foundation v 11804000].. WidgetsPrecompiled binary linux_openmp_64: May 17 2018 (Version AFNI_18.1.15)
+..++ AFNI is detached from terminal.
+.... Input files:
+** Can't read dataset rest1+orig
+
+** Can't read dataset coupling_ret_card_pestica+orig
+
+** Can't read dataset coupling_ret_resp_pestica+orig
+** FATAL ERRORS on input

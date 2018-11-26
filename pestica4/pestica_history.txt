@@ -1,0 +1,30 @@
+3dcopy physio_sandbox/rest1.nii.gz pestica4/physio_sandbox/rest1
+
+Tue Oct 16 09:06:34 EDT 2018
+PESTICA_v4.0 command line: run_pestica.sh -d physio_sandbox/rest1
+PESTICA env:
+PESTICA_DIR=/gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4
+MATLAB_PESTICA_DIR=/gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/pestica_matlab
+PESTICA_VOL_DIR=/gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/template
+
+cd pestica4
+
+3dSkullStrip -input physio_sandbox/rest1+orig -prefix ___tmp_mask
+3dcalc -a ___tmp_mask+orig -prefix ___tmp_mask_ones+orig -expr 'step(a)'
+3dcalc -a ___tmp_mask_ones+orig -prefix ___tmp_mask_ones_dil -b a+i -c a-i -d a+j -e a-j -f a+k -g a-k -expr 'amongst(1,a,b,c,d,e,f,g)'
+3dcalc -a physio_sandbox/rest1+orig[0] -b ___tmp_mask_ones_dil+orig -prefix physio_sandbox/rest1.brain -expr 'a*step(b)'
+rm ___tmp_mask*
+
+matlab -nodesktop -nosplash  addpath /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/afni_matlab; addpath /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/pestica_matlab; addpath /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/eeglab;disp('Wait, script starting...'); prepare_ICA_decomp(15,'physio_sandbox/rest1+orig','physio_sandbox/rest1.brain+orig'); disp('Stage 1 Done!'); exit;
+3dAllineate -automask -prefix ./physio_sandbox/rest1.brain.crg2mni.nii -source physio_sandbox/rest1.brain+orig -base /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/template/meanepi_mni.nii -1Dmatrix_save physio_sandbox/rest1.brain.coreg.mni.1D
+3dAllineate -prefix ./resp_pestica4.nii -source /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/template/resp_mean_mni_pestica4.nii -base physio_sandbox/rest1.brain+orig -1Dmatrix_apply mni.coreg.physio_sandbox/rest1.brain.1D -overwrite
+3dAllineate -prefix ./card_pestica4.nii -source /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/template/card_mean_mni_pestica4.nii -base physio_sandbox/rest1.brain+orig -1Dmatrix_apply mni.coreg.physio_sandbox/rest1.brain.1D -overwrite
+matlab -nodesktop -nosplash  addpath /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/afni_matlab; addpath /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/pestica_matlab; [card,resp]=apply_PESTICA(15,'physio_sandbox/rest1+orig','physio_sandbox/rest1.brain+orig','pestica4'); fp=fopen('card_raw_pestica4.dat','w'); fprintf(fp,'%g\n',card); fclose(fp); fp=fopen('resp_raw_pestica4.dat','w'); fprintf(fp,'%g\n',resp); fclose(fp); exit
+matlab -nodesktop -nosplash  -r addpath /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/afni_matlab; addpath /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/pestica_matlab; load('card_raw_pestica4.dat'); load('resp_raw_pestica4.dat'); card=view_and_correct_estimator(card_raw_pestica4,'physio_sandbox/rest1+orig','c',0); resp=view_and_correct_estimator(resp_raw_pestica4,'physio_sandbox/rest1+orig','r',0); fp=fopen('card_pestica4.dat','w'); fprintf(fp,'%g\n',card); fclose(fp); fp=fopen('resp_pestica4.dat','w'); fprintf(fp,'%g\n',resp); fclose(fp); exit;
+matlab  -nodesktop -nosplash  addpath /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/afni_matlab; addpath /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/pestica_matlab; card=textread('card_pestica4.dat'); resp=textread('resp_pestica4.dat'); retroicor_pestica('physio_sandbox/rest1+orig',card,resp,2,'physio_sandbox/rest1.brain+orig'); exit
+matlab -nodesktop -nosplash  addpath /gpfs/group/mnh5174/default/Nate/psu_neuroimaging_workgroup/pestica4/pestica_matlab; physio_qa('physio_sandbox/rest1+orig',0);
+rm physio_sandbox/rest1+orig.???? (temp file removal inside pestica4 only)
+
+End of PESTICA script
+Tue Oct 16 09:10:03 EDT 2018
+

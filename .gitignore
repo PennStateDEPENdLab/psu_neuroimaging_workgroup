@@ -34,3 +34,20 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
+
+#sanbox data in bids format
+/bids/
+
+#intermediate work files from fmriprep
+/fmriprep_work/
+
+#post-fMRIprep data
+/MR_Proc/
+
+#pestica processed folder
+pestica4_processed
+
+#raw physio
+physio_sandbox
+
+.DS_Store
